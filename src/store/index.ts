@@ -9,7 +9,8 @@ export const store = configureStore({
         pokemon: pokemonSlice.reducer,
     },
     middleware: (getDefaultMiddleware) =>
-        getDefaultMiddleware().concat(pokemonApi.middleware)
+        getDefaultMiddleware().concat(pokemonApi.middleware),
+
 })
 
 setupListeners(store.dispatch)
