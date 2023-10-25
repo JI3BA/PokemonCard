@@ -1,25 +1,31 @@
-import {useGetPokemonByNameQuery, useGetPokemonListQuery} from "@/api/pokemonApi";
-import {useEffect} from "react";
+import {useGetPokemonListQuery} from "@/api/pokemonApi";
+import s from './Pokemon.module.css'
+import {v1} from 'uuid'
+import {useDispatch} from "react-redux";
+import {setNamePokemon} from "@/store/slices/pokemonSlice";
+import Link from "next/link";
 
 
 export const Pokemon = () => {
-    //const {data, error, isLoading} = useGetPokemonByNameQuery('1')
-    const {data, error, isLoading} = useGetPokemonListQuery()
+    const {data, isLoading} = useGetPokemonListQuery()
+    const dispatch = useDispatch()
 
-    useEffect(() => {
-        console.log(data)
-    }, [data])
+    const onClickPokemon = (name: string) => {
+        dispatch(setNamePokemon(name))
+    }
 
     return(
         <>
             {isLoading
-                ? <p className='loader'></p>
-                : <>
-                    {data.results.map(pok => <p>{pok.name}</p>
-                    )}
-                    {/*<img src={data.sprites.other.dream_world.front_default} alt="data.name"/>*/}
-                    {/*<p>{data.name}</p>*/}
-                </>
+                ? <p className={s.loader}></p>
+                : <div className={s.list}>
+                    <ul className={s.list__container}>
+                        {data.results.map(pok =>
+                            <li key={v1()} onClick={() => onClickPokemon(pok.name)} className={s.list__item}>
+                                <Link className={s.list__link} href={`${pok.name}`}>{pok.name}</Link>
+                            </li>)}
+                    </ul>
+                </div>
             }
         </>
     )
